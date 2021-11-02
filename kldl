@@ -1,0 +1,58 @@
+[1mdiff --git a/nothing.py b/nothing.py[m
+[1mindex e69de29..7d344a3 100644[m
+[1m--- a/nothing.py[m
+[1m+++ b/nothing.py[m
+[36m@@ -0,0 +1,53 @@[m
+[32m+[m[32mimport qupath.lib.images.servers.LabeledImageServer[m
+[32m+[m
+[32m+[m[32mdef imageData = getCurrentImageData()[m
+[32m+[m
+[32m+[m[32mpathOutputGlob='C:/Users/sdgro/Desktop/TCGA/Tiles/800'[m
+[32m+[m
+[32m+[m[32m// Define output path (here, relative to project)[m
+[32m+[m[32mdef name = GeneralTools.getNameWithoutExtension(imageData.getServer().getMetadata().getName())[m
+[32m+[m[32mdef pathOutput = buildFilePath(pathOutputGlob, name)[m
+[32m+[m[32mmkdirs(pathOutput)[m
+[32m+[m
+[32m+[m[32m// Define output path (relative to project path) for patches generated from annotations with class 'TUMOR'[m
+[32m+[m[32mdef pathOutput1= buildFilePath(pathOutput, 'Positive')[m
+[32m+[m[32mmkdirs(pathOutput1)[m
+[32m+[m[32mdef server = getCurrentServer()[m
+[32m+[m[32m// Define output resolution[m
+[32m+[m[32mdouble requestedPixelSize = server.getMetadata()["pixelWidthMicrons"][m
+[32m+[m[32m//Размер в um[m
+[32m+[m[32mint real_size = 800[m
+[32m+[m[32m// Считаем размер тайла в пикселях[m
+[32m+[m[32mint tile_size = real_size/requestedPixelSize  // tile size under mpp = 0.922[m
+[32m+[m[32mexte = '.jpg' //also png is possible[m
+[32m+[m
+[32m+[m[32mint overl = 0   // should there be overlap between patches, if yes define oberlap size in pixels[m
+[32m+[m
+[32m+[m[32m// Convert to downsample[m
+[32m+[m[32mdouble downsample = requestedPixelSize / imageData.getServer().getPixelCalibration().getAveragedPixelSize()[m
+[32m+[m
+[32m+[m
+[32m+[m[32m// Create an ImageServer where the pixels are derived from annotations[m
+[32m+[m[32mdef labelServer1 = new LabeledImageServer.Builder(imageData)[m
+[32m+[m[32m    .backgroundLabel(0, ColorTools.WHITE) // Specify background label (usually 0 or 255)[m
+[32m+[m[32m    .downsample(downsample)    // Choose server resolution; this should match the resolution at which tiles are exported[m
+[32m+[m[32m    .addLabel('Positive', 1)      // Choose output labels (the order matters!)[m
+[32m+[m[32m    .multichannelOutput(false)  // If true, each label is a different channel (required for multiclass probability)[m
+[32m+[m[32m    .build()[m
+[32m+[m
+[32m+[m[32m// Create an exporter that requests corresponding tiles from the original & labeled image servers[m
+[32m+[m[32mnew TileExporter(imageData)[m
+[32m+[m[32m    .downsample(downsample)     // Define export resolution[m
+[32m+[m[32m    .imageExtension(exte)     // Define file extension for original pixels (often .tif, .jpg, '.png' or '.ome.tif')[m
+[32m+[m[32m    .tileSize(tile_size)              // Define size of each tile, in pixels[m
+[32m+[m[32m    .labeledServer(labelServer1) // Define the labeled image server to use (i.e. the one we just built)[m
+[32m+[m[32m    .annotatedTilesOnly(false)  // If true, only export tiles if there is a (labeled) annotation present[m
+[32m+[m[32m    .overlap(overl)                // Define overlap, in pixel units at the export resolution[m
+[32m+[m[32m    //.includePartialTiles(true)[m
+[32m+[m[32m    .writeTiles(pathOutput1)     // Write tiles to the specified directory[m
+[32m+[m
+[32m+[m[32mprint 'Done for TUMOR!'[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
