@@ -1,1 +1,3 @@
+b = 10
 print("test)
+print(a*b)
