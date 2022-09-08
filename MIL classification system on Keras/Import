@@ -1,0 +1,11 @@
+import numpy as np
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+from tqdm import tqdm
+from matplotlib import pyplot as plt
+plt.style.use("ggplot")
+from sklearn.model_selection import train_test_split
+tf.test.is_gpu_available(
+    cuda_only=False, min_cuda_compute_capability=None
+)
