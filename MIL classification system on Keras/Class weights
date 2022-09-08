@@ -1,0 +1,13 @@
+#Class weights
+def compute_class_weights(labels):
+
+    # Count number of postive and negative bags.
+    negative_count = len(np.where(labels == 0)[0])
+    positive_count = len(np.where(labels == 1)[0])
+    total_count = negative_count + positive_count
+
+    # Build class weight dictionary.
+    return {
+        0: (1 / negative_count) * (total_count / 2),
+        1: (1 / positive_count) * (total_count / 2),
+    }
