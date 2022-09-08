@@ -1,0 +1,12 @@
+# Building model(s).
+instance_shape = train_data[0][0].shape
+models = [create_model(instance_shape) for _ in range(ENSEMBLE_AVG_COUNT)]
+
+# Show single model architecture.
+print(models[0].summary())
+
+# Training model(s).
+trained_models = [
+    train(train_data, train_labels, val_data, val_labels, model)
+    for model in tqdm(models)
+]
