@@ -1,0 +1,13 @@
+import os
+import glob
+
+path = r'Z:/FullTile/full_tile/' #22 symbols
+count_l = 0
+for root, dirs, files in os.walk(path):
+    for file in files:
+        if file.endswith(".png"):
+            count_l+=1
+            shutil.copy(root.replace('\\','/') + '/'+file,root[:11:] + btf_folder + root[22::].replace('\\','/') + '/'+ file )
+            #shutil.move(root.replace('\\','/') + '/'+file,root[:11:] + btf_folder + root[22::].replace('\\','/') + '/'+ file )
+            #os.remove(root.replace('\\','/') + '/'+file)
+print('I copy/move img with type .png in ', root[:11:] + btf_folder + root[22::].replace('\\','/') + '/', 'on', len_class_name, 'class successfully')
