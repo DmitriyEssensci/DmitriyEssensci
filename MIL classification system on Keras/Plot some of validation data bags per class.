@@ -1,0 +1,3 @@
+# Plot some of validation data bags per class.
+plot(val_data, val_labels, "positive")
+plot(val_data, val_labels, "negative")
