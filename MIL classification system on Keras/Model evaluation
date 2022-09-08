@@ -1,0 +1,57 @@
+#Model evaluation
+def predict(data, labels, trained_models):
+
+    # Collect info per model.
+    models_predictions = []
+    models_attention_weights = []
+    models_losses = []
+    models_accuracies = []
+
+    for model in trained_models:
+
+        # Predict output classes on data.
+        predictions = model.predict(data)
+        models_predictions.append(predictions)
+
+        # Create intermediate model to get MIL attention layer weights.
+        intermediate_model = keras.Model(model.input, model.get_layer("alpha").output)
+
+        # Predict MIL attention layer weights.
+        intermediate_predictions = intermediate_model.predict(data)
+
+        attention_weights = np.squeeze(np.swapaxes(intermediate_predictions, 1, 0))
+        models_attention_weights.append(attention_weights)
+
+        loss, accuracy = model.evaluate(data, labels, verbose=0)
+        models_losses.append(loss)
+        models_accuracies.append(accuracy)
+
+    print(
+        f"The average loss and accuracy are {np.sum(models_losses, axis=0) / ENSEMBLE_AVG_COUNT:.2f}"
+        f" and {100 * np.sum(models_accuracies, axis=0) / ENSEMBLE_AVG_COUNT:.2f} % resp."
+    )
+
+    return (
+        np.sum(models_predictions, axis=0) / ENSEMBLE_AVG_COUNT,
+        np.sum(models_attention_weights, axis=0) / ENSEMBLE_AVG_COUNT,
+    )
+
+
+# Evaluate and predict classes and attention scores on validation data.
+class_predictions, attention_params = predict(val_data, val_labels, trained_models)
+
+# Plot some results from our validation data.
+plot(
+    val_data,
+    val_labels,
+    "positive",
+    predictions=class_predictions,
+    attention_weights=attention_params,
+)
+plot(
+    val_data,
+    val_labels,
+    "negative",
+    predictions=class_predictions,
+    attention_weights=attention_params,
+)
