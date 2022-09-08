@@ -1,0 +1,26 @@
+ #Build train model
+def train(train_data, train_labels, val_data, val_labels, model):
+
+    # Train model.
+    # Prepare callbacks.
+    # Path where to save best weights.
+
+    # Take the file name from the wrapper.
+    file_path = "C:/Users/sdgro/Рабочий стол/MIL_System/callbCK/best_model_weights4.h5"
+
+    # Initialize model checkpoint callback.
+    model_checkpoint = keras.callbacks.ModelCheckpoint(
+        file_path,
+        monitor="val_loss",
+        verbose=0,
+        mode="min",
+        save_best_only=True,
+        save_weights_only=True,
+    )
+
+    # Initialize early stopping callback.
+    # The model performance is monitored across the validation data and stops training
+    # when the generalization error cease to decrease.
+    early_stopping = keras.callbacks.EarlyStopping(
+        monitor="val_loss", patience=10, mode="min"
+    )
