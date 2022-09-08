@@ -1,0 +1,52 @@
+#Visualization tools
+def plot(data, labels, bag_class, predictions=None, attention_weights=None):
+
+    """"Utility for plotting bags and attention weights.
+
+    Args:
+      data: Input data that contains the bags of instances.
+      labels: The associated bag labels of the input data.
+      bag_class: String name of the desired bag class.
+        The options are: "positive" or "negative".
+      predictions: Class labels model predictions.
+      If you don't specify anything, ground truth labels will be used.
+      attention_weights: Attention weights for each instance within the input data.
+      If you don't specify anything, the values won't be displayed.
+    """
+
+    labels = np.array(labels).reshape(-1)
+
+    if bag_class == "positive":
+        if predictions is not None:
+            labels = np.where(predictions.argmax(1) == 1)[0]
+            bags = np.array(data)[:, labels[0:PLOT_SIZE]]
+
+        else:
+            labels = np.where(labels == 1)[0]
+            bags = np.array(data)[:, labels[0:PLOT_SIZE]]
+
+    elif bag_class == "negative":
+        if predictions is not None:
+            labels = np.where(predictions.argmax(1) == 0)[0]
+            bags = np.array(data)[:, labels[0:PLOT_SIZE]]
+        else:
+            labels = np.where(labels == 0)[0]
+            bags = np.array(data)[:, labels[0:PLOT_SIZE]]
+
+    else:
+        print(f"There is no class {bag_class}")
+        return
+
+    print(f"The bag class label is {bag_class}")
+    for i in range(PLOT_SIZE):
+        figure = plt.figure(figsize=(8, 8))
+        print(f"Bag number: {labels[i]}")
+        for j in range(BAG_SIZE):
+            image = bags[j][i]
+            figure.add_subplot(1, BAG_SIZE, j + 1)
+            plt.grid(False)
+            if attention_weights is not None:
+                plt.title(np.around(attention_weights[labels[i]][j], 2))
+            plt.imshow(image)
+        plt.show()
+
