@@ -1,0 +1,22 @@
+import os
+import glob
+tf.test.is_gpu_available(
+    cuda_only=False, min_cuda_compute_capability=None
+)
+
+directroty_to_folder = r'Z:/FullTile/full_tile/' #22 symbols
+btf_folder = '/mask_tile/' #move/copy
+#btf_folder = '/binar_img/' #build MIL dataset
+folder_name = os.listdir(directroty_to_folder)
+begin_count_folder_in_directory = len(folder_name)
+len_folder_name = len(folder_name)
+count_folder = 0
+for i in folder_name:
+    for j in range(len_folder_name):
+        os.makedirs(name[0:11] + btf_folder + folder_name[j])
+        new_folder_name = name[0:11] + btf_folder + folder_name[j]
+        count_folder+=1
+        print('I create folder',folder_name[j],'in directory',name[0:11] + btf_folder)
+        for c in range(len_class_name):
+            os.mkdir(name[0:11] + btf_folder + folder_name[j] + '/' +class_name[c])
+            print('I create folder class',class_name[c],'in directory',name[0:11] + btf_folder + folder_name[j], '\n')
