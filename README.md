@@ -1,5 +1,1 @@
-- 👋 Hi, I’m @DmitriyEssensci
-- 👀 I’m interested in datascience / ML
-- 🌱 I’m currently learning in university
-- 💞️ I’m looking to collaborate on with yandex and IBM, im very strong big boy, yeah.
-- 📫 How to reach me my mail: sdgrove@hotmail.com
+fuku
